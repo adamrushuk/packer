@@ -1,2 +1,3 @@
-# packer
-Packer examples
+# Packer
+
+Packer examples.
