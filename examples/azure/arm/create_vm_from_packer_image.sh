@@ -52,18 +52,19 @@ vm1_ip=$(az vm list-ip-addresses --resource-group $vm_resource_group_name --name
 vm2_ip=$(az vm list-ip-addresses --resource-group $vm_resource_group_name --name $vm2_name --query [].virtualMachine.network.publicIpAddresses[].ipAddress -o tsv)
 
 # test web servers
-curl -v "$vm1_ip"
+curl -v "$vm1_ip" --port 80
 curl -v "$vm2_ip"
 
 # test direct connectivity using netcat
 # connect to vm1
 ssh "sysadmin@$vm1_ip"
 
-# start netcat listener on port 8080
-sudo nc -l 8080
+# start netcat listener on port 80
+sudo nc -l 80
 
 # from a second console session, send test message from vm2 to vm1
-ssh "sysadmin@$vm2_ip" echo "Connectivity works between [$vm1_ip] and [$vm2_ip]" | nc "$vm1_ip" 8080
+ssh "sysadmin@$vm2_ip" echo "Connectivity works between [$vm1_ip] and [$vm2_ip]" | nc "$vm1_ip" 80
 
 # CLEANUP
+echo "Deleting VM Resource Group [$vm_resource_group_name] ..."
 az group delete --name "$vm_resource_group_name"

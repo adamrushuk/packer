@@ -3,7 +3,11 @@
 ## Documentation
 
 - https://www.packer.io/downloads
+- https://www.packer.io/docs/terminology
+- https://www.packer.io/docs/commands
+- https://www.packer.io/docs/templates/hcl_templates
 - https://www.packer.io/plugins/builders/azure
+- https://www.packer.io/plugins/builders/azure/arm
 
 ## Install Packer
 
@@ -41,13 +45,16 @@ az login
 # select subscription
 az account set --subscription 'MY_SUB_NAME'
 
-# init
+# move into example folder
 cd examples/azure/arm/
+
+# init
 packer init ubuntu.pkr.hcl
 
 # validate
 packer validate .
 
-# build
-packer build ubuntu.pkr.hcl
+# build (prompt for cleanup action on error)
+# https://www.packer.io/docs/commands/build#ask
+packer build -on-error=ask ubuntu.pkr.hcl
 ```
